@@ -20,12 +20,16 @@ set(PROJECT_SOURCES
   ${PROJECT_SOURCE_DIR}/ProjectCreator.cpp
   ${PROJECT_SOURCE_DIR}/Application.cpp
   ${PROJECT_SOURCE_DIR}/ProjectBuilder.cpp
+  ${PROJECT_SOURCE_DIR}/FileManager.cpp
+
 )
 
 set(PROJECT_HEADERS 
   ${PROJECT_INCLUDE_DIR}/ProjectCreator.hpp
   ${PROJECT_INCLUDE_DIR}/ProjectBuilder.hpp
   ${PROJECT_INCLUDE_DIR}/Application.hpp
+  ${PROJECT_INCLUDE_DIR}/FileManager.hpp
+
 )
 
 include_directories(${PROJECT_INCLUDE_DIR})
