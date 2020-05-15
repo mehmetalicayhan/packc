@@ -29,6 +29,8 @@ set(PROJECT_HEADERS
   ${PROJECT_INCLUDE_DIR}/ProjectBuilder.hpp
   ${PROJECT_INCLUDE_DIR}/Application.hpp
   ${PROJECT_INCLUDE_DIR}/FileManager.hpp
+  ${PROJECT_INCLUDE_DIR}/json.hpp
+
 
 )
 
