@@ -16,21 +16,21 @@ set(PROJECT_SOURCE_DIR ${PROJECT_DIR}/src)
 # set(PROJECT_UTILS_DIR ${PROJECT_DIR}/utils)
 
 set(PROJECT_SOURCES
-  ${PROJECT_SOURCE_DIR}/main.cpp
-  ${PROJECT_SOURCE_DIR}/ProjectCreator.cpp
-  ${PROJECT_SOURCE_DIR}/Application.cpp
-  ${PROJECT_SOURCE_DIR}/ProjectBuilder.cpp
-  ${PROJECT_SOURCE_DIR}/FileManager.cpp
+        ${PROJECT_SOURCE_DIR}/main.cpp
+        ${PROJECT_SOURCE_DIR}/ProjectCreator.cpp
+        ${PROJECT_SOURCE_DIR}/Application.cpp
+        ${PROJECT_SOURCE_DIR}/ProjectBuilder.cpp
+        ${PROJECT_SOURCE_DIR}/FileManager.cpp
+        ${PROJECT_SOURCE_DIR}/ProjectGenerator.cpp include/ProjectGenerator.hpp)
 
-)
-
-set(PROJECT_HEADERS 
-  ${PROJECT_INCLUDE_DIR}/ProjectCreator.hpp
-  ${PROJECT_INCLUDE_DIR}/ProjectBuilder.hpp
-  ${PROJECT_INCLUDE_DIR}/Application.hpp
-  ${PROJECT_INCLUDE_DIR}/FileManager.hpp
-  ${PROJECT_INCLUDE_DIR}/json.hpp
-)
+set(PROJECT_HEADERS
+        ${PROJECT_INCLUDE_DIR}/ProjectCreator.hpp
+        ${PROJECT_INCLUDE_DIR}/ProjectBuilder.hpp
+        ${PROJECT_INCLUDE_DIR}/Application.hpp
+        ${PROJECT_INCLUDE_DIR}/FileManager.hpp
+        ${PROJECT_INCLUDE_DIR}/ProjectGenerator.hpp
+        ${PROJECT_INCLUDE_DIR}/json.hpp
+        )
 
 include_directories(${PROJECT_INCLUDE_DIR})
 # target_link_libraries(ncurses)
