@@ -49,6 +49,19 @@ void ProjectCreator::createProject() {
     fileManager->createInitFiles();
 }
 
+void ProjectCreator::writeHelpPage() {
+    std::cout << "DESCRIPTION\n\n"
+              << "USAGE\n\n"
+              << "Create Project:\tpackc create\n\n"
+              << "Source File:\tpackc add -s <filename>\n\n"
+              << "C++ Class:\tpackc add -c <filename>\n\n"
+              << "Header File:\tpackc add -h <filename>\n\n"
+              << "Build Project:\t packc build\n\n"
+              << "Run Project:\t packc run\n\n"
+              << "Clean Project:\t packc clean\n\n";
+
+}
+
 ProjectCreator::~ProjectCreator() {
     delete fileManager;
     delete this;
