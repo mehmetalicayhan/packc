@@ -21,7 +21,8 @@ set(PROJECT_SOURCES
         ${PROJECT_SOURCE_DIR}/Application.cpp
         ${PROJECT_SOURCE_DIR}/ProjectBuilder.cpp
         ${PROJECT_SOURCE_DIR}/FileManager.cpp
-        ${PROJECT_SOURCE_DIR}/ProjectGenerator.cpp include/ProjectGenerator.hpp)
+        ${PROJECT_SOURCE_DIR}/ProjectGenerator.cpp
+        )
 
 set(PROJECT_HEADERS
         ${PROJECT_INCLUDE_DIR}/ProjectCreator.hpp
