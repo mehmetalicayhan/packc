@@ -18,14 +18,21 @@ ProjectBuilder::ProjectBuilder(/* args */) {
 }
 
 void ProjectBuilder::runCommands(std::string argument) {
-    std::multimap<std::string, std::string>::iterator itr;
 
+    // control is .json file here
+    std::multimap<std::string, std::string>::iterator itr;
+    bool found = false;
     for (itr = jsonData.begin(); itr != jsonData.end(); ++itr) {
         std::string command = itr->second;
         if (itr->first == argument) {
             // std::cout << itr->first << "\t" << command;
             system(command.c_str());
+            found = true;
         }
+    }
+
+    if (!found) {
+        std::cout << "Cannot found " << argument << " command\n";
     }
 }
 
