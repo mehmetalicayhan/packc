@@ -1,10 +1,11 @@
 #include "Application.hpp"
 #include <iostream>
 #include <FileManager.hpp>
-
+#include "ProjectBuilder.hpp"
 Application::Application(int argc, char const *argv[])
 {
   std::string programArg = argv[1];
+  ProjectBuilder *pb = new ProjectBuilder();
 
   if (argc < 2)
   {
@@ -43,6 +44,7 @@ Application::Application(int argc, char const *argv[])
       FileManager::createFile(FileManager::FileType::HEADER, fileName);
     }
   }
+  pb->runCommands(programArg);
 }
 
 Application::~Application()

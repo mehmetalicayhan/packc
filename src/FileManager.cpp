@@ -2,6 +2,11 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
+#include <json.hpp>
+
+// for convenience
+using json = nlohmann::json;
+
 FileManager::FileManager(std::string projectName)
 {
   this->projectName = projectName;
@@ -34,11 +39,21 @@ void FileManager::createCMakeFile()
 
 void FileManager::createMACFile()
 {
-  std::ofstream macFile(projectDir + "/project.cppmac");
-  macFile << "Project Name : " << projectName << "\n"
-          << "Version : " << projectVersion << "\n"
-          << "Make System : " << projectMakeSystem << "\n"
-          << "Author : " << projectAuthor << "\n";
+  /*
+  "commands" : [
+    {"run"}
+  ]
+  
+  */
+  json j2 = {
+      {"Project Name", projectName},
+      {"Version", projectVersion},
+      {"Make System", projectMakeSystem},
+      {"Author", projectAuthor},
+      {"commands", {{"run", "cd build && ./" + projectName}, {"build", "mkdir -p build && cd build && cmake .. && make"}}}};
+  std::ofstream macFile(projectDir + "/cppmac.json");
+
+  macFile << j2.dump(4);
 
   macFile.close();
 }
