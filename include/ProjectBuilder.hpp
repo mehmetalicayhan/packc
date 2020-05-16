@@ -11,8 +11,6 @@ private:
 public:
   ProjectBuilder();
   ~ProjectBuilder();
-  static void buildProject();
-  void runProject();
   void runCommands(std::string argument);
 };
 

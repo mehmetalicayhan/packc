@@ -4,7 +4,6 @@
 #include <vector>
 #include <json.hpp>
 
-// for convenience
 using json = nlohmann::json;
 
 FileManager::FileManager(std::string projectName)
@@ -40,9 +39,11 @@ void FileManager::createCMakeFile()
 void FileManager::createMACFile()
 {
   /*
-  "commands" : [
-    {"run"}
-  ]
+  "commands" : {}
+    "run" : "cd build"
+    "build" : "naber"
+    "create" : "what"
+  }
   
   */
   json j2 = {
@@ -189,44 +190,6 @@ void FileManager::addToCMakeFile(std::string name, std::string extension)
     }
   }
 }
-
-// void FileManager::addToCMakeFile(std::string name, std::string extension)
-// {
-//   if (isFileExist("./CMakeLists.txt") == true)
-//   {
-//     std::ifstream cmake_in("./CMakeLists.txt");
-//     // std::ofstream cmake_out("./CMakeLists.txt", std::ios_base::app);
-//     std::string line;
-//     std::string temp;
-//     std::string content;
-//     // std::string temp = extension == ".cpp" ? "set(PROJECT_SOURCES" : "set(PROJECT_HEADERS";
-//     std::string replace;
-//     if (extension == ".cpp")
-//     {
-//       temp = "set(PROJECT_HEADERS";
-//       replace = "set(PROJECT_SOURCES\n${PROJECT_SOURCE_DIR}/" + name + ".cpp\n";
-//     }
-//     else
-//     {
-//       temp = "set(PROJECT_SOURCES";
-//       replace = "set(PROJECT_HEADERS\n${PROJECT_SOURCE_DIR}/" + name + ".hpp\n";
-//     }
-//     int lineCount = 0;
-//     while (cmake_in >> line)
-//     {
-//       lineCount++;
-//       content = line + "\n";
-//     }
-
-//     for (int i = 0; i < lineCount; i++)
-//     {
-
-//     }
-
-//     // cmake_out.close();
-//     cmake_in.close();
-//   }
-// }
 
 FileManager::~FileManager()
 {

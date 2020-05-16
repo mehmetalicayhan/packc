@@ -5,7 +5,7 @@
 Application::Application(int argc, char const *argv[])
 {
   std::string programArg = argv[1];
-  ProjectBuilder *pb = new ProjectBuilder();
+  ProjectBuilder *pb = new ProjectBuilder(); // use from class and delete in destructor
 
   if (argc < 2)
   {
