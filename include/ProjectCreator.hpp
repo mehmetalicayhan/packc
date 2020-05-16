@@ -31,6 +31,8 @@ public:
     void init();
 
     void createDirectory(std::string createDir = "");
+
+    static void writeHelpPage();
 };
 
 #endif
