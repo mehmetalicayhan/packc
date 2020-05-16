@@ -27,7 +27,7 @@ public:
   void createMACFile();
   void createMainFile();
   static void createSourceFile(std::string name);
-  static void craeteHeaderFile(std::string name);
+  static void createHeaderFile(std::string name);
   void createInitFiles();
   static bool isFileExist(std::string path);
   static void createFile(FileType type, std::string name);

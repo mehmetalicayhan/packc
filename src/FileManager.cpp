@@ -50,7 +50,7 @@ void FileManager::createMACFile() {
             {"Make System",  projectMakeSystem},
             {"Author",       projectAuthor},
             {"commands",     {{"run", "cd build && ./" +
-                                      projectName}, {"build", "mkdir -p build && cd build && cmake .. && make"}}}};
+                                      projectName}, {"build", "mkdir -p build && cd build && cmake .. && make"},{"clean","rm -rf build"}}}};
     std::ofstream macFile(projectDir + "/packc.json");
 
     macFile << j2.dump(4);
@@ -88,7 +88,7 @@ void FileManager::createSourceFile(std::string name) {
     sourceFile.close();
 }
 
-void FileManager::craeteHeaderFile(std::string name) {
+void FileManager::createHeaderFile(std::string name) {
     std::string headerFilePath = "./include/" + name + ".hpp";
     std::ofstream headerFile(headerFilePath);
 
@@ -129,7 +129,7 @@ void FileManager::createFile(FileType type, std::string name) {
             createSourceFile(name);
             addToCMakeFile(name, ".cpp");
         } else if (type == FileType::HEADER) {
-            craeteHeaderFile(name);
+            createHeaderFile(name);
             addToCMakeFile(name, ".hpp");
         } else {
             return;
