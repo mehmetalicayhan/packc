@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
-project(cppmac)
+project(packc)
 
 set(SHARED_FLAGS "-lncurses")
 set(CMAKE_C_FLAGS "-std=c17 ${SHARED_FLAGS}")
@@ -30,8 +30,6 @@ set(PROJECT_HEADERS
   ${PROJECT_INCLUDE_DIR}/Application.hpp
   ${PROJECT_INCLUDE_DIR}/FileManager.hpp
   ${PROJECT_INCLUDE_DIR}/json.hpp
-
-
 )
 
 include_directories(${PROJECT_INCLUDE_DIR})
