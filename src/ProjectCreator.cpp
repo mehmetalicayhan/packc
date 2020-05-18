@@ -34,9 +34,22 @@ void ProjectCreator::init() {
 }
 
 void ProjectCreator::createDirectory(std::string directoryName) {
-    std::string path = p_path + "/" + directoryName;
+    std::string path;
+    path = p_path + "/" + directoryName;
+#ifdef __unix__
     filesystem::create_directory(path.c_str());
+
+#elif defined(_WIN32) || defined(WIN32)
+#include<windows.h>
+    if(CreateDirectory(path,NULL)){
+
+        std::cout<<"Created";
+
+    }
+
+#endif
 }
+
 
 void ProjectCreator::createDirectories() {
     for (size_t i = 0; i < 3; i++) {
