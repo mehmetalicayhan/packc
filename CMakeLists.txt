@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 
 project(packc)
 
-set(SHARED_FLAGS "-lncurses")
+set(SHARED_FLAGS)
 set(CMAKE_C_FLAGS "-std=c17 ${SHARED_FLAGS}")
 set(CMAKE_CXX_FLAGS "-std=c++17 ${SHARED_FLAGS}")
 
@@ -35,8 +35,8 @@ set(PROJECT_HEADERS
 
 include_directories(${PROJECT_INCLUDE_DIR})
 # target_link_libraries(ncurses)
-if (UNIX)
+if (UNIX AND NOT APPLE)
     link_libraries(stdc++fs)
-endif (UNIX)
+endif (UNIX AND NOT APPLE)
 
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
