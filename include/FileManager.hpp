@@ -12,6 +12,8 @@ private:
     string projectName;
     string projectVersion;
     string projectAuthor;
+    string projectRepository;
+
 
 public:
     enum class FileType {
@@ -43,7 +45,7 @@ public:
 
     explicit FileManager(string &projectName);
 
-    FileManager(string &projectName, string &projectVersion, string &projectAuthor);
+    FileManager(string &projectName, string &projectVersion, string &projectAuthor,string &projectRepository);
 
     ~FileManager();
 };

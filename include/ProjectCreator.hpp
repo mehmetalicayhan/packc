@@ -5,12 +5,12 @@
     #define CMAKE_FLAGS "-G \"MinGW Makefiles\""
 #elif __linux__
 #include<experimental/filesystem>
+#elif __APPLE__
+#include <sys/stat.h>
 #endif
-#include <experimental/filesystem>
 #include <iostream>
 #include "FileManager.hpp"
 
-namespace filesystem = std::experimental::filesystem;
 
 class ProjectCreator {
 
@@ -20,6 +20,8 @@ private:
     std::string p_version;
     std::string p_author;
     std::string p_path;
+    std::string p_repository;
+
     FileManager *fileManager;
     std::string directories[3] = {"", "include", "src"};
 

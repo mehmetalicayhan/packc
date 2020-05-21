@@ -6,20 +6,24 @@
 
 using json = nlohmann::json;
 
-FileManager::FileManager(std::string &projectName) {
+FileManager::FileManager(std::string &projectName)
+{
     this->projectName = projectName;
     this->projectDir = "./" + projectName;
 }
 
 FileManager::FileManager(std::string &projectName, std::string &projectVersion,
-                         std::string &projectAuthor) {
+                         std::string &projectAuthor, std::string &projectRepository)
+{
     this->projectName = projectName;
     this->projectVersion = projectVersion;
     this->projectAuthor = projectAuthor;
     this->projectDir = "./" + projectName;
+    this->projectRepository = projectRepository;
 }
 
-void FileManager::createCMakeFile() {
+void FileManager::createCMakeFile()
+{
     std::ofstream cmakeFile(projectDir + "/CMakeLists.txt");
     cmakeFile << "cmake_minimum_required(VERSION 2.8)"
               << "\n"
@@ -34,7 +38,8 @@ void FileManager::createCMakeFile() {
     cmakeFile.close();
 }
 
-void FileManager::createMACFile() {
+void FileManager::createMACFile()
+{
     /*
     "commands" : {}
       "run" : "cd build"
@@ -44,28 +49,29 @@ void FileManager::createMACFile() {
 
   */
     json j2 = {
-            {"Project Name", projectName},
-            {"Version",      projectVersion},
-            {"Author",       projectAuthor},
-            {"commands",     {{"run", "cd build && ./" +
-                                      projectName}, {"build", "mkdir -p build && cd build && cmake .. && make"}, {"clean", "rm -rf build"}}}};
+        {"Project Name", projectName},
+        {"Version", projectVersion},
+        {"Author", projectAuthor},
+        {"Repository", projectRepository},
+        {"commands", {{"run", "cd build && ./" + projectName}, {"build", "mkdir -p build && cd build && cmake .. && make"}, {"clean", "rm -rf build"}}}};
     std::ofstream macFile(projectDir + "/packc.json");
 
     macFile << j2.dump(4);
 
     macFile.close();
-    std::cout << "created";
 }
 
-void FileManager::createMainFile() {
+void FileManager::createMainFile()
+{
     std::string mainPath = projectDir + "/src/main.cpp";
     std::ofstream mainFile(mainPath);
     mainFile
-            << "#include<iostream>\n\nint main(int argc,char** argv){\n\n\tstd::cout<<\"Hello World\"<<std::endl;\n\n\treturn 0;\n\n}";
+        << "#include<iostream>\n\nint main(int argc,char** argv){\n\n\tstd::cout<<\"Hello World\"<<std::endl;\n\n\treturn 0;\n\n}";
     mainFile.close();
 }
 
-void FileManager::createSourceFile(const std::string& name) {
+void FileManager::createSourceFile(const std::string &name)
+{
     std::string srcFilePath = "./src/" + name + ".cpp";
     std::ofstream sourceFile(srcFilePath);
     sourceFile << "//#include \" " + name + ".hpp\" \n"
@@ -86,7 +92,8 @@ void FileManager::createSourceFile(const std::string& name) {
     sourceFile.close();
 }
 
-void FileManager::createHeaderFile(const std::string& name) {
+void FileManager::createHeaderFile(const std::string &name)
+{
     std::string headerFilePath = "./include/" + name + ".hpp";
     std::ofstream headerFile(headerFilePath);
 
@@ -105,57 +112,75 @@ void FileManager::createHeaderFile(const std::string& name) {
     headerFile.close();
 }
 
-void FileManager::createInitFiles() {
+void FileManager::createInitFiles()
+{
     createCMakeFile();
     createMACFile();
     createMainFile();
 }
 
-bool FileManager::isFileExist(const std::string& path) {
-    if (FILE *file = fopen(path.c_str(), "r")) {
+bool FileManager::isFileExist(const std::string &path)
+{
+    if (FILE *file = fopen(path.c_str(), "r"))
+    {
         fclose(file);
         return true;
-    } else {
+    }
+    else
+    {
         return false;
     }
 }
 
-void FileManager::createFile(FileType type, const std::string& name) {
+void FileManager::createFile(FileType type, const std::string &name)
+{
     std::ofstream file;
-    if (isFileExist("./packc.json")) {
-        if (type == FileType::SOURCE) {
+    if (isFileExist("./packc.json"))
+    {
+        if (type == FileType::SOURCE)
+        {
             createSourceFile(name);
             addToCMakeFile(name, ".cpp");
-        } else if (type == FileType::HEADER) {
+        }
+        else if (type == FileType::HEADER)
+        {
             createHeaderFile(name);
             addToCMakeFile(name, ".hpp");
-        } else {
+        }
+        else
+        {
             return;
         }
     }
 }
 
-void FileManager::addToCMakeFile(const std::string& name, const std::string& extension) {
-    if (isFileExist("./CMakeLists.txt")) {
+void FileManager::addToCMakeFile(const std::string &name, const std::string &extension)
+{
+    if (isFileExist("./CMakeLists.txt"))
+    {
         std::fstream file("./CMakeLists.txt", std::ios::in);
         std::string replace;
         std::string replace_with;
 
-        if (extension == ".cpp") {
+        if (extension == ".cpp")
+        {
             replace = "set(PROJECT_SOURCES";
             replace_with = "set(PROJECT_SOURCES\n${PROJECT_SOURCE_DIR}/" + name + ".cpp";
-        } else {
+        }
+        else
+        {
             replace = "set(PROJECT_HEADERS";
             replace_with = "set(PROJECT_HEADERS\n${PROJECT_INCLUDE_DIR}/" + name + ".hpp";
         }
         std::string line;
         std::vector<std::string> lines;
-        while (std::getline(file, line)) {
-            std::cout << line << std::endl;
+        while (std::getline(file, line))
+        {
 
             std::string::size_type pos = 0;
 
-            while ((pos = line.find(replace, pos)) != std::string::npos) {
+            while ((pos = line.find(replace, pos)) != std::string::npos)
+            {
                 line.replace(pos, line.size(), replace_with);
                 pos += replace_with.size();
             }
@@ -165,12 +190,14 @@ void FileManager::addToCMakeFile(const std::string& name, const std::string& ext
         file.close();
         file.open("./CMakeLists.txt", std::ios::out | std::ios::trunc);
 
-        for (const auto &i : lines) {
+        for (const auto &i : lines)
+        {
             file << i << std::endl;
         }
     }
 }
 
-FileManager::~FileManager() {
+FileManager::~FileManager()
+{
     delete this;
 }
