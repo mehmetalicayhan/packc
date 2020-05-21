@@ -20,10 +20,7 @@ void ProjectCreator::init()
 
     std::cout << "Version (1.0.0) : ";
     getline(std::cin, version);
-    if (version == "")
-    {
-        version = "1.0.0";
-    }
+    version == "" ? "1.0.0" : version;
 
     std::cout << "Author : ";
     getline(std::cin, author);
@@ -46,6 +43,7 @@ void ProjectCreator::createDirectory(const std::string &directoryName)
     mkdir(path.c_str());
 #elif __linux__
     path = p_path + "/" + directoryName;
+    namespace filesystem = std::experimental::filesystem;
     filesystem::create_directory(path.c_str());
 #elif __APPLE__
     path = p_path + "/" + directoryName;
