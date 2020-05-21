@@ -36,3 +36,4 @@ build
 yapilacaklar.txt
 .idea
 cmake-build-debug
+.DS_STORE
