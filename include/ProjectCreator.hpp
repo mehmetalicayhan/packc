@@ -1,6 +1,11 @@
 #ifndef ProjectCreator_HPP
 #define ProjectCreator_HPP
-
+#ifdef _WIN32
+#include"direct.h"
+    #define CMAKE_FLAGS "-G \"MinGW Makefiles\""
+#elif __linux__
+#include<experimental/filesystem>
+#endif
 #include <experimental/filesystem>
 #include <iostream>
 #include "FileManager.hpp"

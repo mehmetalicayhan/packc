@@ -33,19 +33,16 @@ void ProjectCreator::init() {
 
 void ProjectCreator::createDirectory(const std::string &directoryName) {
     std::string path;
+#ifdef _WIN32
     path = p_path + "/" + directoryName;
-#ifdef __unix__
+            mkdir(path.c_str());
+#elif __linux__
+    path = p_path + "/" + directoryName;
     filesystem::create_directory(path.c_str());
-
-#elif defined(_WIN32) || defined(WIN32)
-#include<windows.h>
-    if(CreateDirectory(path,NULL)){
-
-        std::cout<<"Created";
-
-    }
+#elif __APPLE__
 
 #endif
+
 }
 
 
