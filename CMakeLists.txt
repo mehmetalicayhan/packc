@@ -35,6 +35,8 @@ set(PROJECT_HEADERS
 
 include_directories(${PROJECT_INCLUDE_DIR})
 # target_link_libraries(ncurses)
-link_libraries(stdc++fs)
+if (UNIX)
+    link_libraries(stdc++fs)
+endif (UNIX)
 
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
