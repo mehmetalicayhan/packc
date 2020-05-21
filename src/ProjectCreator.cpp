@@ -3,6 +3,7 @@
 
 ProjectCreator::ProjectCreator() {
     init();
+    fileManager = new FileManager(p_name, p_version, p_author);
     createProject();
 }
 
@@ -26,14 +27,11 @@ void ProjectCreator::init() {
 
     p_name = projectName;
     p_version = version;
-    p_makeSystem = makeSystem;
     p_author = author;
     p_path = "./" + p_name;
-
-    fileManager = new FileManager(p_name, p_version, p_makeSystem, p_author);
 }
 
-void ProjectCreator::createDirectory(std::string directoryName) {
+void ProjectCreator::createDirectory(const std::string &directoryName) {
     std::string path;
     path = p_path + "/" + directoryName;
 #ifdef __unix__
@@ -64,11 +62,12 @@ void ProjectCreator::createProject() {
 
 void ProjectCreator::writeHelpPage() {
     std::cout << "DESCRIPTION\n\n"
+              << "packc is a project manager for C++ written by @mehmetalicayhan.\nYou can create project or add classes,source files, or header files to your existing packc project. \nIn same time this files add to your cmake file automatically.\nYou can build and run your projects and define your own commands.\n\n"
               << "USAGE\n\n"
               << "Create Project:\tpackc create\n\n"
-              << "Source File:\tpackc add -s <filename>\n\n"
-              << "C++ Class:\tpackc add -c <filename>\n\n"
-              << "Header File:\tpackc add -h <filename>\n\n"
+              << "Create Source File:\tpackc add -s <filename>\n\n"
+              << "Create C++ Class:\tpackc add -c <filename>\n\n"
+              << "Create Header File:\tpackc add -h <filename>\n\n"
               << "Build Project:\t packc build\n\n"
               << "Run Project:\t packc run\n\n"
               << "Clean Project:\t packc clean\n\n";

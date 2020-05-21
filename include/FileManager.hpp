@@ -3,38 +3,49 @@
 
 #include <string>
 
-class FileManager
-{
+using namespace std;
+
+class FileManager {
 
 private:
-  std::string projectDir;
-  std::string projectName;
-  std::string projectVersion;
-  std::string projectMakeSystem;
-  std::string projectAuthor;
+    string projectDir;
+    string projectName;
+    string projectVersion;
+    string projectAuthor;
 
 public:
-  enum class FileType
-  {
-    CMAKE,
-    MAKEFILE,
-    HEADER,
-    SOURCE,
-    MAIN,
-    MAC
-  };
-  void createCMakeFile();
-  void createMACFile();
-  void createMainFile();
-  static void createSourceFile(std::string name);
-  static void createHeaderFile(std::string name);
-  void createInitFiles();
-  static bool isFileExist(std::string path);
-  static void createFile(FileType type, std::string name);
-  static void addToCMakeFile(std::string name, std::string extension);
-  FileManager(std::string projectName = "./");
-  FileManager(std::string projectName, std::string projectVersion, std::string projectMakeSystem, std::string projectAuthor);
-  ~FileManager();
+    enum class FileType {
+        CMAKE,
+        MAKEFILE,
+        HEADER,
+        SOURCE,
+        MAIN,
+        MAC
+    };
+
+    void createCMakeFile();
+
+    void createMACFile();
+
+    void createMainFile();
+
+    static void createSourceFile(const string &name);
+
+    static void createHeaderFile(const string &name);
+
+    void createInitFiles();
+
+    static bool isFileExist(const string &path);
+
+    static void createFile(FileType type, const string &name);
+
+    static void addToCMakeFile(const string &name, const string &extension);
+
+    explicit FileManager(string &projectName);
+
+    FileManager(string &projectName, string &projectVersion, string &projectAuthor);
+
+    ~FileManager();
 };
 
 #endif

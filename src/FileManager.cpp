@@ -6,16 +6,15 @@
 
 using json = nlohmann::json;
 
-FileManager::FileManager(std::string projectName) {
+FileManager::FileManager(std::string &projectName) {
     this->projectName = projectName;
     this->projectDir = "./" + projectName;
 }
 
-FileManager::FileManager(std::string projectName, std::string projectVersion, std::string projectMakeSystem,
-                         std::string projectAuthor) {
+FileManager::FileManager(std::string &projectName, std::string &projectVersion,
+                         std::string &projectAuthor) {
     this->projectName = projectName;
     this->projectVersion = projectVersion;
-    this->projectMakeSystem = projectMakeSystem;
     this->projectAuthor = projectAuthor;
     this->projectDir = "./" + projectName;
 }
@@ -47,10 +46,9 @@ void FileManager::createMACFile() {
     json j2 = {
             {"Project Name", projectName},
             {"Version",      projectVersion},
-            {"Make System",  projectMakeSystem},
             {"Author",       projectAuthor},
             {"commands",     {{"run", "cd build && ./" +
-                                      projectName}, {"build", "mkdir -p build && cd build && cmake .. && make"},{"clean","rm -rf build"}}}};
+                                      projectName}, {"build", "mkdir -p build && cd build && cmake .. && make"}, {"clean", "rm -rf build"}}}};
     std::ofstream macFile(projectDir + "/packc.json");
 
     macFile << j2.dump(4);
@@ -67,7 +65,7 @@ void FileManager::createMainFile() {
     mainFile.close();
 }
 
-void FileManager::createSourceFile(std::string name) {
+void FileManager::createSourceFile(const std::string& name) {
     std::string srcFilePath = "./src/" + name + ".cpp";
     std::ofstream sourceFile(srcFilePath);
     sourceFile << "//#include \" " + name + ".hpp\" \n"
@@ -88,7 +86,7 @@ void FileManager::createSourceFile(std::string name) {
     sourceFile.close();
 }
 
-void FileManager::createHeaderFile(std::string name) {
+void FileManager::createHeaderFile(const std::string& name) {
     std::string headerFilePath = "./include/" + name + ".hpp";
     std::ofstream headerFile(headerFilePath);
 
@@ -113,7 +111,7 @@ void FileManager::createInitFiles() {
     createMainFile();
 }
 
-bool FileManager::isFileExist(std::string path) {
+bool FileManager::isFileExist(const std::string& path) {
     if (FILE *file = fopen(path.c_str(), "r")) {
         fclose(file);
         return true;
@@ -122,9 +120,9 @@ bool FileManager::isFileExist(std::string path) {
     }
 }
 
-void FileManager::createFile(FileType type, std::string name) {
+void FileManager::createFile(FileType type, const std::string& name) {
     std::ofstream file;
-    if (isFileExist("./packc.json") == true) {
+    if (isFileExist("./packc.json")) {
         if (type == FileType::SOURCE) {
             createSourceFile(name);
             addToCMakeFile(name, ".cpp");
@@ -137,8 +135,8 @@ void FileManager::createFile(FileType type, std::string name) {
     }
 }
 
-void FileManager::addToCMakeFile(std::string name, std::string extension) {
-    if (isFileExist("./CMakeLists.txt") == true) {
+void FileManager::addToCMakeFile(const std::string& name, const std::string& extension) {
+    if (isFileExist("./CMakeLists.txt")) {
         std::fstream file("./CMakeLists.txt", std::ios::in);
         std::string replace;
         std::string replace_with;

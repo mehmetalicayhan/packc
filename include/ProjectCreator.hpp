@@ -14,7 +14,6 @@ private:
     std::string p_name;
     std::string p_version;
     std::string p_author;
-    std::string p_makeSystem;
     std::string p_path;
     FileManager *fileManager;
     std::string directories[3] = {"", "include", "src"};
@@ -30,7 +29,7 @@ public:
 
     void init();
 
-    void createDirectory(std::string createDir = "");
+    void createDirectory(const std::string& createDir = "");
 
     static void writeHelpPage();
 };
