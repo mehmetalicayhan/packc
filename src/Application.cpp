@@ -8,7 +8,7 @@ Application::Application(int argc, char const *argv[]) {
     std::string programArg;
 
     if (argc < 2) {
-        ProjectCreator::writeHelpPage();
+        ProjectCreator::printHelp();
         return;
     } else {
         programArg = argv[1];
@@ -35,7 +35,7 @@ Application::Application(int argc, char const *argv[]) {
                 FileManager::createFile(FileManager::FileType::HEADER, fileName);
             }
         } else if (programArg == "help") {
-            ProjectCreator::writeHelpPage();
+            ProjectCreator::printHelp();
         } else {
             projectBuilder = new ProjectBuilder();
             projectBuilder->runCommands(programArg);

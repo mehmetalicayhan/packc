@@ -1,17 +1,20 @@
 #ifndef ProjectBuilder_HPP
 #define ProjectBuilder_HPP
+
 #include <vector>
 #include <map>
-class ProjectBuilder
-{
+
+class ProjectBuilder {
 
 private:
-  std::multimap<std::string, std::string> jsonData;
+    std::multimap<std::string, std::string> jsonData;
 
 public:
-  ProjectBuilder();
-  ~ProjectBuilder();
-  void runCommands(std::string argument);
+    ProjectBuilder();
+
+    ~ProjectBuilder();
+
+    void runCommands(std::string argument);
 };
 
 #endif
