@@ -2,12 +2,13 @@
 #define ProjectCreator_HPP
 #ifdef _WIN32
 #include"direct.h"
-    #define CMAKE_FLAGS "-G \"MinGW Makefiles\""
-#elif __linux__
-#include<experimental/filesystem>
-#elif __APPLE__
+#define CMAKE_FLAGS "-G \"MinGW Makefiles\""
+#elif __unix__
+
 #include <sys/stat.h>
+
 #endif
+
 #include <iostream>
 #include "FileManager.hpp"
 
@@ -23,7 +24,7 @@ private:
     std::string p_repository;
 
     FileManager *fileManager;
-    std::string directories[3] = {"", "include", "src"};
+    std::string directories[4] = {"", "include", "src", "build"};
 
 public:
     ProjectCreator();
@@ -36,9 +37,9 @@ public:
 
     void init();
 
-    void createDirectory(const std::string& createDir = "");
+    void createDirectory(const std::string &createDir = "");
 
-    static void writeHelpPage();
+    static void printHelp();
 };
 
 #endif

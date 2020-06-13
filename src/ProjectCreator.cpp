@@ -1,15 +1,13 @@
 #include "ProjectCreator.hpp"
 #include <fstream>
 
-ProjectCreator::ProjectCreator()
-{
+ProjectCreator::ProjectCreator() {
     init();
     fileManager = new FileManager(p_name, p_version, p_author, p_repository);
     createProject();
 }
 
-void ProjectCreator::init()
-{
+void ProjectCreator::init() {
     std::string projectName;
     std::string version;
     std::string author;
@@ -20,7 +18,7 @@ void ProjectCreator::init()
 
     std::cout << "Version (1.0.0) : ";
     getline(std::cin, version);
-    version == "" ? "1.0.0" : version;
+    version.empty() ? "1.0.0" : version;
 
     std::cout << "Author : ";
     getline(std::cin, author);
@@ -35,38 +33,29 @@ void ProjectCreator::init()
     p_path = "./" + p_name;
 }
 
-void ProjectCreator::createDirectory(const std::string &directoryName)
-{
+void ProjectCreator::createDirectory(const std::string &directoryName) {
     std::string path;
 #ifdef _WIN32
     path = p_path + "/" + directoryName;
     mkdir(path.c_str());
-#elif __linux__
-    path = p_path + "/" + directoryName;
-    namespace filesystem = std::experimental::filesystem;
-    filesystem::create_directory(path.c_str());
-#elif __APPLE__
+#elif __unix__
     path = p_path + "/" + directoryName;
     mkdir(path.c_str(), 0777);
 #endif
 }
 
-void ProjectCreator::createDirectories()
-{
-    for (size_t i = 0; i < 3; i++)
-    {
+void ProjectCreator::createDirectories() {
+    for (size_t i = 0; i < 4; i++) {
         createDirectory(directories[i].c_str());
     }
 }
 
-void ProjectCreator::createProject()
-{
+void ProjectCreator::createProject() {
     createDirectories();
     fileManager->createInitFiles();
 }
 
-void ProjectCreator::writeHelpPage()
-{
+void ProjectCreator::printHelp() {
     std::cout << "DESCRIPTION\n\n"
               << "packc is a project manager for C++ written by @mehmetalicayhan.\nYou can create project or add classes,source files, or header files to your existing packc project. \nIn same time this files add to your cmake file automatically.\nYou can build and run your projects and define your own commands.\n\n"
               << "USAGE\n\n"
@@ -79,8 +68,7 @@ void ProjectCreator::writeHelpPage()
               << "Clean Project:\t packc clean\n\n";
 }
 
-ProjectCreator::~ProjectCreator()
-{
+ProjectCreator::~ProjectCreator() {
     delete fileManager;
     delete this;
 }
