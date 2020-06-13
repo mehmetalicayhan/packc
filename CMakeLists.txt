@@ -21,7 +21,6 @@ set(PROJECT_SOURCES
         ${PROJECT_SOURCE_DIR}/Application.cpp
         ${PROJECT_SOURCE_DIR}/ProjectBuilder.cpp
         ${PROJECT_SOURCE_DIR}/FileManager.cpp
-        ${PROJECT_SOURCE_DIR}/ProjectGenerator.cpp
         )
 
 set(PROJECT_HEADERS
@@ -29,14 +28,13 @@ set(PROJECT_HEADERS
         ${PROJECT_INCLUDE_DIR}/ProjectBuilder.hpp
         ${PROJECT_INCLUDE_DIR}/Application.hpp
         ${PROJECT_INCLUDE_DIR}/FileManager.hpp
-        ${PROJECT_INCLUDE_DIR}/ProjectGenerator.hpp
         ${PROJECT_INCLUDE_DIR}/json.hpp
         )
 
 include_directories(${PROJECT_INCLUDE_DIR})
 # target_link_libraries(ncurses)
-if (UNIX AND NOT APPLE)
-    link_libraries(stdc++fs)
-endif (UNIX AND NOT APPLE)
+# if (UNIX AND NOT APPLE)
+#    link_libraries(stdc++fs)
+# endif (UNIX AND NOT APPLE)
 
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
