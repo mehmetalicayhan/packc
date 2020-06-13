@@ -13,6 +13,8 @@ private:
     string projectVersion;
     string projectAuthor;
     string projectRepository;
+    string OS_MAKE;
+    string OS_REMOVE;
 
 
 public:
@@ -27,11 +29,11 @@ public:
 
     void createCMakeFile();
 
-    void createMACFile();
+    void createConfFile();
 
     void createMainFile();
 
-    static void createSourceFile(const string &name);
+    static void createSourceFile(const string &name, bool isClass);
 
     static void createHeaderFile(const string &name);
 
@@ -43,9 +45,7 @@ public:
 
     static void addToCMakeFile(const string &name, const string &extension);
 
-    explicit FileManager(string &projectName);
-
-    FileManager(string &projectName, string &projectVersion, string &projectAuthor,string &projectRepository);
+    FileManager(string &projectName, string &projectVersion, string &projectAuthor, string &projectRepository);
 
     ~FileManager();
 };
