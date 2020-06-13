@@ -76,7 +76,7 @@ void FileManager::createSourceFile(const std::string &name)
     std::string srcFilePath = "./src/" + name + ".cpp";
     std::ofstream sourceFile(srcFilePath);
 
-    sourceFile << "//#include \" " + name + ".hpp\" \n"
+    sourceFile << "#include \"" + name + ".hpp\" \n"
 
                // << "class " + name + "\n"
                //<< "{\n"
