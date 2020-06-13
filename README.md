@@ -7,7 +7,6 @@
 1. [Description](#description)
 2. [Usage](#usage)
 3. [Installation](#installation)
-3. [Screenshots](#screenshots)
 4. [License](#license)
 
 ## Description
