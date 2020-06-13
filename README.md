@@ -20,11 +20,11 @@ You can build and run your projects and define your own commands.
 
 Create Project:	packc create
 
-Create Source File:	packc add -s <filename>
+Create Source File:	packc add -s \<<span style="color:red;">filename</span>>
 
-Create C++ Class:	packc add -c <filename>
+Create C++ Class:	packc add -c \<<span style="color:red;">filename</span>>
 
-Create Header File:	packc add -h <filename>
+Create Header File:	packc add -h \<<span style="color:red;">filename</span>>
 
 Build Project:	 packc build
 
