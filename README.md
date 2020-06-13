@@ -41,7 +41,7 @@ Clean Project:	 packc clean
 - Open a terminal and enter following command
 
 ```
-  sudo dpkg -i copymanage-1.0.0-b1.deb
+  sudo dpkg -i packc-0.0.2-beta.deb
 ```
 
 ## License
