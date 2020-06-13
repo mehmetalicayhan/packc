@@ -13,7 +13,13 @@ Application::Application(int argc, char const *argv[]) {
     } else {
         programArg = argv[1];
         if (programArg == "create") {
-            projectCreator = new ProjectCreator();
+            if( argc == 2)
+                projectCreator = new ProjectCreator();
+            else{
+                std::cout<<"\nCheck the 'packc help' command to run it correctly\n";
+                return;
+            } 
+
         } else if (programArg == "add") {
 
             std::string argument = argv[2];

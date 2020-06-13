@@ -33,7 +33,7 @@ public:
 
     void createMainFile();
 
-    static void createSourceFile(const string &name, bool isClass);
+    static void createSourceFile(const string &name);
 
     static void createHeaderFile(const string &name);
 
