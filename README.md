@@ -1,4 +1,4 @@
-<h1> <img src="./image/icon.png"
+<h1> <img src="./assets/icon.png"
   width="100"> 
 </h1>
 
