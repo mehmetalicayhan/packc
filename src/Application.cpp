@@ -40,6 +40,9 @@ Application::Application(int argc, char const *argv[]) {
                 // TODO .h file include in class
                 FileManager::createFile(FileManager::FileType::HEADER, fileName);
             }
+            else if(argument=="-dl") {
+                FileManager::addDynamicLibrary(fileName);
+            }
         } else if (programArg == "help") {
             ProjectCreator::printHelp();
         } else {

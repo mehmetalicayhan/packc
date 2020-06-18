@@ -7,8 +7,7 @@
 using json = nlohmann::json;
 
 FileManager::FileManager(std::string &projectName, std::string &projectVersion,
-                         std::string &projectAuthor, std::string &projectRepository)
-{
+                         std::string &projectAuthor, std::string &projectRepository) {
     this->projectName = projectName;
     this->projectVersion = projectVersion;
     this->projectAuthor = projectAuthor;
@@ -23,24 +22,24 @@ FileManager::FileManager(std::string &projectName, std::string &projectVersion,
 #endif
 }
 
-void FileManager::createCMakeFile()
-{
+void FileManager::createCMakeFile() {
     std::ofstream cmakeFile(projectDir + "/CMakeLists.txt");
-    cmakeFile << "cmake_minimum_required(VERSION 2.8)"
-              << "\n"
-              << "project(" + projectName + ")\n"
-              << "set(PROJECT_DIR ${CMAKE_SOURCE_DIR})\n"
-              << "set(PROJECT_INCLUDE_DIR ${PROJECT_DIR}/include)\n"
-              << "set(PROJECT_SOURCE_DIR ${PROJECT_DIR}/src)\n"
-              << "set(PROJECT_SOURCES\n${PROJECT_SOURCE_DIR}/main.cpp)\n"
-              << "set(PROJECT_HEADERS\n)\n"
-              << "include_directories(${PROJECT_INCLUDE_DIR})\n"
-              << "add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})\n";
+    cmakeFile << "cmake_minimum_required(VERSION 2.8)\n\n"
+              << "project(" + projectName + ")\n\n"
+              << "set(SHARED_FLAGS\n)\n"
+              << "set(CMAKE_C_FLAGS \"-std=c17 ${SHARED_FLAGS}\")\n"
+              << "set(CMAKE_CXX_FLAGS \"-std=c++17 ${SHARED_FLAGS}\")\n\n"
+              << "set(PROJECT_DIR ${CMAKE_SOURCE_DIR})\n\n"
+              << "set(PROJECT_INCLUDE_DIR ${PROJECT_DIR}/include)\n\n"
+              << "set(PROJECT_SOURCE_DIR ${PROJECT_DIR}/src)\n\n"
+              << "set(PROJECT_SOURCES\n${PROJECT_SOURCE_DIR}/main.cpp)\n\n"
+              << "set(PROJECT_HEADERS\n)\n\n"
+              << "include_directories(${PROJECT_INCLUDE_DIR})\n\n"
+              << "add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})\n\n";
     cmakeFile.close();
 }
 
-void FileManager::createConfFile()
-{
+void FileManager::createConfFile() {
     /*
     "commands" : {}
       "run" : "cd build"
@@ -50,11 +49,13 @@ void FileManager::createConfFile()
 
   */
     json j2 = {
-        {"Project Name", projectName},
-        {"Version", projectVersion},
-        {"Author", projectAuthor},
-        {"Repository", projectRepository},
-        {"commands", {{"run", "cd build && ./" + projectName}, {"build", "cd build && cmake .. && " + OS_MAKE}, {"clean", OS_REMOVE + " build"}}}};
+            {"Project Name", projectName},
+            {"Version",      projectVersion},
+            {"Author",       projectAuthor},
+            {"Repository",   projectRepository},
+            {"commands",     {{"run", "cd build && ./" + projectName}, {"build", "cd build && cmake .. && " +
+                                                                                 OS_MAKE}, {"clean", OS_REMOVE +
+                                                                                                     " build"}}}};
     std::ofstream macFile(projectDir + "/packc.json");
 
     macFile << j2.dump(4);
@@ -62,17 +63,15 @@ void FileManager::createConfFile()
     macFile.close();
 }
 
-void FileManager::createMainFile()
-{
+void FileManager::createMainFile() {
     std::string mainPath = projectDir + "/src/main.cpp";
     std::ofstream mainFile(mainPath);
     mainFile
-        << "#include<iostream>\n\nint main(int argc,char** argv){\n\n\tstd::cout<<\"Hello World\"<<std::endl;\n\n\treturn 0;\n\n}";
+            << "#include<iostream>\n\nint main(int argc,char** argv){\n\n\tstd::cout<<\"Hello World\"<<std::endl;\n\n\treturn 0;\n\n}";
     mainFile.close();
 }
 
-void FileManager::createSourceFile(const std::string &name)
-{
+void FileManager::createSourceFile(const std::string &name) {
     std::string srcFilePath = "./src/" + name + ".cpp";
     std::ofstream sourceFile(srcFilePath);
 
@@ -95,8 +94,7 @@ void FileManager::createSourceFile(const std::string &name)
     sourceFile.close();
 }
 
-void FileManager::createHeaderFile(const std::string &name)
-{
+void FileManager::createHeaderFile(const std::string &name) {
     std::string headerFilePath = "./include/" + name + ".hpp";
     std::ofstream headerFile(headerFilePath);
 
@@ -115,75 +113,56 @@ void FileManager::createHeaderFile(const std::string &name)
     headerFile.close();
 }
 
-void FileManager::createInitFiles()
-{
+void FileManager::createInitFiles() {
     createCMakeFile();
     createConfFile();
     createMainFile();
 }
 
-bool FileManager::isFileExist(const std::string &path)
-{
-    if (FILE *file = fopen(path.c_str(), "r"))
-    {
+bool FileManager::isFileExist(const std::string &path) {
+    if (FILE *file = fopen(path.c_str(), "r")) {
         fclose(file);
         return true;
-    }
-    else
-    {
+    } else {
         return false;
     }
 }
 
-void FileManager::createFile(FileType type, const std::string &name)
-{
+void FileManager::createFile(FileType type, const std::string &name) {
     std::ofstream file;
-    if (isFileExist("./packc.json"))
-    {
-        if (type == FileType::SOURCE)
-        {
+    if (isFileExist("./packc.json")) {
+        if (type == FileType::SOURCE) {
             createSourceFile(name);
             addToCMakeFile(name, ".cpp");
-        }
-        else if (type == FileType::HEADER)
-        {
+        } else if (type == FileType::HEADER) {
             createHeaderFile(name);
             addToCMakeFile(name, ".hpp");
-        }
-        else
-        {
+        } else {
             return;
         }
     }
 }
 
-void FileManager::addToCMakeFile(const std::string &name, const std::string &extension)
-{
-    if (isFileExist("./CMakeLists.txt"))
-    {
+void FileManager::addToCMakeFile(const std::string &name, const std::string &extension) {
+    if (isFileExist("./CMakeLists.txt")) {
         std::fstream file("./CMakeLists.txt", std::ios::in);
         std::string replace;
         std::string replace_with;
 
-        if (extension == ".cpp")
-        {
+        if (extension == ".cpp") {
             replace = "set(PROJECT_SOURCES";
             replace_with = "set(PROJECT_SOURCES\n${PROJECT_SOURCE_DIR}/" + name + ".cpp";
-        }
-        else
-        {
+        } else {
             replace = "set(PROJECT_HEADERS";
             replace_with = "set(PROJECT_HEADERS\n${PROJECT_INCLUDE_DIR}/" + name + ".hpp";
         }
         std::string line;
         std::vector<std::string> lines;
-        while (std::getline(file, line))
-        {
+        while (std::getline(file, line)) {
 
             std::string::size_type pos = 0;
 
-            while ((pos = line.find(replace, pos)) != std::string::npos)
-            {
+            while ((pos = line.find(replace, pos)) != std::string::npos) {
                 line.replace(pos, line.size(), replace_with);
                 pos += replace_with.size();
             }
@@ -193,14 +172,43 @@ void FileManager::addToCMakeFile(const std::string &name, const std::string &ext
         file.close();
         file.open("./CMakeLists.txt", std::ios::out | std::ios::trunc);
 
-        for (const auto &i : lines)
-        {
+        for (const auto &i : lines) {
             file << i << std::endl;
         }
     }
 }
 
-FileManager::~FileManager()
-{
+// TODO add private function for replace
+void FileManager::addDynamicLibrary(const string &libName) {
+    if (isFileExist("./CMakeLists.txt")) {
+        std::fstream file("./CMakeLists.txt", std::ios::in);
+        std::string replace;
+        std::string replaceWith;
+        replace = "set(SHARED_FLAGS";
+        replaceWith = "set(SHARED_FLAGS\n " + libName ;
+        std::string line;
+        std::vector<std::string> lines;
+        while (std::getline(file, line)) {
+
+            std::string::size_type pos = 0;
+
+            while ((pos = line.find(replace, pos)) != std::string::npos) {
+                std::cout << replace;
+                line.replace(pos, line.size(), replaceWith);
+                pos += replaceWith.size();
+            }
+
+            lines.push_back(line);
+        }
+        file.close();
+        file.open("./CMakeLists.txt", std::ios::out | std::ios::trunc);
+
+        for (const auto &i : lines) {
+            file << i << std::endl;
+        }
+    }
+}
+
+FileManager::~FileManager() {
     delete this;
 }

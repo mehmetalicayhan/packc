@@ -5,7 +5,8 @@
 
 using namespace std;
 
-class FileManager {
+class FileManager
+{
 
 private:
     string projectDir;
@@ -16,9 +17,9 @@ private:
     string OS_MAKE;
     string OS_REMOVE;
 
-
 public:
-    enum class FileType {
+    enum class FileType
+    {
         CMAKE,
         MAKEFILE,
         HEADER,
@@ -44,6 +45,8 @@ public:
     static void createFile(FileType type, const string &name);
 
     static void addToCMakeFile(const string &name, const string &extension);
+
+    static void addDynamicLibrary(const string &libName);
 
     FileManager(string &projectName, string &projectVersion, string &projectAuthor, string &projectRepository);
 
