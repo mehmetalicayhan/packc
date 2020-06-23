@@ -23,25 +23,43 @@ Application::Application(int argc, char const *argv[]) {
         } else if (programArg == "add") {
 
             std::string argument = argv[2];
-            std::string fileName = argv[3];
 
             if (argument == "-c") {
                 std::cout << "create class";
 
-                FileManager::createFile(FileManager::FileType::SOURCE, fileName);
-                FileManager::createFile(FileManager::FileType::HEADER, fileName);
+                for(int i=3; i < argc; i++)
+                {
+                    std::string filename = argv[i];
+                    FileManager::createFile(FileManager::FileType::SOURCE, filename);
+                    FileManager::createFile(FileManager::FileType::HEADER, filename);
+                }
             } else if (argument == "-s") {
                 std::cout << "create source :";
 
-                FileManager::createFile(FileManager::FileType::SOURCE, fileName);
+                for(int i=3; i < argc; i++)
+                {
+                    std::cout << "Creating class: " << argv[i] << std::endl;
+                    std::string filename = argv[i];
+                    FileManager::createFile(FileManager::FileType::SOURCE, filename);
+                }
+                
             } else if (argument == "-h") {
                 std::cout << "create header :";
 
                 // TODO .h file include in class
-                FileManager::createFile(FileManager::FileType::HEADER, fileName);
+                for(int i=3; i < argc; i++)
+                {
+                    std::string filename = argv[i];
+                    FileManager::createFile(FileManager::FileType::HEADER, filename);
+                }
             }
-            else if(argument=="-dl") {
-                FileManager::addDynamicLibrary(fileName);
+            else if(argument=="-l") {
+                
+                for(int i=3; i < argc; i++)
+                {
+                    std::string libraryName = argv[i];
+                    FileManager::addDynamicLibrary(libraryName);
+                }
             }
         } else if (programArg == "help") {
             ProjectCreator::printHelp();

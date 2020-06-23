@@ -185,7 +185,7 @@ void FileManager::addDynamicLibrary(const string &libName) {
         std::string replace;
         std::string replaceWith;
         replace = "set(SHARED_FLAGS";
-        replaceWith = "set(SHARED_FLAGS\n " + libName ;
+        replaceWith = "set(SHARED_FLAGS\n -l" + libName ;
         std::string line;
         std::vector<std::string> lines;
         while (std::getline(file, line)) {
