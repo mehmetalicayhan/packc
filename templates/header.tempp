@@ -1,0 +1,14 @@
+#ifndef <ProjectName>_HPP
+#define <ProjectName>_HPP
+class <ProjectName>
+{
+private: 
+
+public: 
+
+   <ProjectName>(/* args */); 
+   ~<ProjectName>(); 
+};
+
+
+#endif

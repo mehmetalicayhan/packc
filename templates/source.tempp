@@ -1,0 +1,7 @@
+#include "<ProjectName>.hpp" 
+<ProjectName>::<ProjectName>(/*args*/)
+{
+}
+<ProjectName>::~<ProjectName>()
+{
+}
