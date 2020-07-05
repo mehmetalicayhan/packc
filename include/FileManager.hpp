@@ -2,11 +2,12 @@
 #define FileManager_HPP
 
 #include <string>
+#include <map>
+#include <cfgpath.h>
 
 using namespace std;
 
-class FileManager
-{
+class FileManager {
 
 private:
     string projectDir;
@@ -18,12 +19,11 @@ private:
     string OS_REMOVE;
 
 public:
-    enum class FileType
-    {
+    enum class FileType {
         CMAKE,
         MAKEFILE,
         HEADER,
-        SOURCE,
+        SOURCE ,
         MAIN,
         MAC
     };
@@ -40,9 +40,15 @@ public:
 
     void createInitFiles();
 
+    static std::string readFile(const std::string &name, FileType type);
+
     static bool isFileExist(const string &path);
 
     static void createFile(FileType type, const string &name);
+
+    static string getPath(FileType type);
+
+    static std::string replace(std::string data, const std::string &replace, const std::string &replaceWith);
 
     static void addToCMakeFile(const string &name, const string &extension);
 
@@ -51,6 +57,8 @@ public:
     FileManager(string &projectName, string &projectVersion, string &projectAuthor, string &projectRepository);
 
     ~FileManager();
+
+    static string getExtension(FileType type);
 };
 
 #endif
