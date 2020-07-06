@@ -7,7 +7,8 @@
 using json = nlohmann::json;
 
 FileManager::FileManager(std::string &projectName, std::string &projectVersion,
-                         std::string &projectAuthor, std::string &projectRepository) {
+                         std::string &projectAuthor, std::string &projectRepository)
+{
     this->projectName = projectName;
     this->projectVersion = projectVersion;
     this->projectAuthor = projectAuthor;
@@ -16,13 +17,15 @@ FileManager::FileManager(std::string &projectName, std::string &projectVersion,
 #ifdef _WIN32
     OS_MAKE = "mingw32-make";
     OS_REMOVE = "rmdir";
-#elif __unix__
+#elif __unix__ || __APPLE__
     OS_MAKE = "make";
     OS_REMOVE = "rm -rf";
 #endif
 }
 
-void FileManager::createCMakeFile() {
+void FileManager::createCMakeFile()
+{
+    std::cout<<projectDir;
     std::ofstream cmakeFile(projectDir + "/CMakeLists.txt");
     cmakeFile << "cmake_minimum_required(VERSION 2.8)\n\n"
               << "project(" + projectName + ")\n\n"
@@ -39,16 +42,15 @@ void FileManager::createCMakeFile() {
     cmakeFile.close();
 }
 
-void FileManager::createConfFile() {
+void FileManager::createConfFile()
+{
 
     json j2 = {
-            {"Project Name", projectName},
-            {"Version",      projectVersion},
-            {"Author",       projectAuthor},
-            {"Repository",   projectRepository},
-            {"commands",     {{"run", "cd build && ./" + projectName}, {"build", "cd build && cmake .. && " +
-                                                                                 OS_MAKE}, {"clean", OS_REMOVE +
-                                                                                                     " build"}}}};
+        {"Project Name", projectName},
+        {"Version", projectVersion},
+        {"Author", projectAuthor},
+        {"Repository", projectRepository},
+        {"commands", {{"run", "cd build && ./" + projectName}, {"build", "cd build && cmake .. && " + OS_MAKE}, {"clean", OS_REMOVE + " build"}}}};
     std::ofstream macFile(projectDir + "/packc.json");
 
     macFile << j2.dump(4);
@@ -56,76 +58,60 @@ void FileManager::createConfFile() {
     macFile.close();
 }
 
-void FileManager::createMainFile() {
+void FileManager::createMainFile()
+{
     std::string mainPath = projectDir + "/src/main.cpp";
     std::ofstream mainFile(mainPath);
     mainFile
-            << "#include<iostream>\n\nint main(int argc,char** argv){\n\n\tstd::cout<<\"Hello World\"<<std::endl;\n\n\treturn 0;\n\n}";
+        << "#include<iostream>\n\nint main(int argc,char** argv){\n\n\tstd::cout<<\"Hello World\"<<std::endl;\n\n\treturn 0;\n\n}";
     mainFile.close();
 }
 
-void FileManager::createSourceFile(const std::string &name) {
-    std::string srcFilePath = "./src/" + name + ".cpp";
-    std::string fileContent = readFile(name,FileType::SOURCE);
-    std::string::size_type pos = 0;
-    while ((pos = fileContent.find("<ProjectName>", pos)) != std::string::npos) {
-        fileContent.replace(pos, fileContent.size(), name);
-        pos += name.size();
-    }
-    std::ofstream sourceFile(srcFilePath);
-    sourceFile << fileContent;
-    sourceFile.close();
-}
 
-void FileManager::createHeaderFile(const std::string &name) {
-    std::string headerFilePath = "./include/" + name + ".hpp";
-    std::ofstream headerFile(headerFilePath);
-
-    headerFile << "#ifndef " + name + "_HPP\n"
-               << "#define " + name + "_HPP\n"
-               << "class " + name + "\n"
-               << "{\n"
-               << "private: \n\n"
-               << "public: \n\n"
-               << "   " + name + "(/* args */); \n"
-               << "   ~" + name + "(); \n"
-               << "};\n"
-               << "\n\n"
-               << "#endif";
-
-    headerFile.close();
-}
-
-void FileManager::createInitFiles() {
+void FileManager::createInitFiles()
+{
     createCMakeFile();
     createConfFile();
     createMainFile();
 }
 
-bool FileManager::isFileExist(const std::string &path) {
-    if (FILE *file = fopen(path.c_str(), "r")) {
+bool FileManager::isFileExist(const std::string &path)
+{
+    if (FILE *file = fopen(path.c_str(), "r"))
+    {
         fclose(file);
         return true;
-    } else {
+    }
+    else
+    {
         return false;
     }
 }
 
-void FileManager::createFile(FileType type, const std::string &name) {
+void FileManager::createFile(FileType type, const std::string &name)
+{
     std::string fileExtension = getExtension(type);
     std::string filePath = getPath(type) + name + fileExtension;
 
-    std::string fileContent = readFile(name,FileType::SOURCE);
-    std::cout<<filePath;
+    std::string fileContent = readFile(name, type);
+    std::cout << filePath;
     std::ofstream file(filePath);
-    fileContent = FileManager::replace(fileContent,"<ProjectName>",name);
-    if (isFileExist("./packc.json")) {
-        file<<fileContent;
-        if (type == FileType::SOURCE) {
+    
+    fileContent = replaceString(fileContent,"<ProjectName>",name);
+
+    if (isFileExist("./packc.json"))
+    {
+        file << fileContent;
+        if (type == FileType::SOURCE)
+        {
             addToCMakeFile(name, ".cpp");
-        } else if (type == FileType::HEADER) {
+        }
+        else if (type == FileType::HEADER)
+        {
             addToCMakeFile(name, ".hpp");
-        } else {
+        }
+        else
+        {
             file.close();
             return;
         }
@@ -134,31 +120,33 @@ void FileManager::createFile(FileType type, const std::string &name) {
     file.close();
 }
 
-
-std::string FileManager::readFile(const std::string& name,FileType type) {
-    char cfgdir[256];
-    get_user_config_folder(cfgdir, sizeof(cfgdir), "packc");
-    if (cfgdir[0] == 0) {
-        std::cout << "Unable to find home directory.\n";
-    }
-    std::cout << cfgdir << std::endl;
+std::string FileManager::readFile(const std::string &name, FileType type)
+{
+    // char cfgdir[256];
+    // get_user_config_folder(cfgdir, sizeof(cfgdir), "packc");
+    // if (cfgdir[0] == 0) {
+    //     std::cout << "Unable to find home directory.\n";
+    // }
+    // std::cout << cfgdir << std::endl;
     std::string filePath = "../../templates/";
-    switch (type) {
-        case FileType::SOURCE:
-            filePath += "source.tempp";
-            break;
-        case FileType::HEADER:
-            filePath += "header.tempp";
-            break;
-        default:
-            break;
+    switch (type)
+    {
+    case FileType::SOURCE:
+        filePath += "source.tempp";
+        break;
+    case FileType::HEADER:
+        filePath += "header.tempp";
+        break;
+    default:
+        break;
     }
 
     ifstream readFile(filePath);
     std::string fileContent;
     std::string line;
 
-    while (getline(readFile, line)) {
+    while (getline(readFile, line))
+    {
         fileContent += line;
         fileContent += "\n";
     }
@@ -168,26 +156,33 @@ std::string FileManager::readFile(const std::string& name,FileType type) {
     return fileContent;
 }
 
-void FileManager::addToCMakeFile(const std::string &name, const std::string &extension) {
-    if (isFileExist("./CMakeLists.txt")) {
+void FileManager::addToCMakeFile(const std::string &name, const std::string &extension)
+{
+    if (isFileExist("./CMakeLists.txt"))
+    {
         std::fstream file("./CMakeLists.txt", std::ios::in);
         std::string replace;
         std::string replace_with;
 
-        if (extension == ".cpp") {
+        if (extension == ".cpp")
+        {
             replace = "set(PROJECT_SOURCES";
             replace_with = "set(PROJECT_SOURCES\n${PROJECT_SOURCE_DIR}/" + name + ".cpp";
-        } else {
+        }
+        else
+        {
             replace = "set(PROJECT_HEADERS";
             replace_with = "set(PROJECT_HEADERS\n${PROJECT_INCLUDE_DIR}/" + name + ".hpp";
         }
         std::string line;
         std::vector<std::string> lines;
-        while (std::getline(file, line)) {
+        while (std::getline(file, line))
+        {
 
             std::string::size_type pos = 0;
 
-            while ((pos = line.find(replace, pos)) != std::string::npos) {
+            while ((pos = line.find(replace, pos)) != std::string::npos)
+            {
                 line.replace(pos, line.size(), replace_with);
                 pos += replace_with.size();
             }
@@ -197,14 +192,17 @@ void FileManager::addToCMakeFile(const std::string &name, const std::string &ext
         file.close();
         file.open("./CMakeLists.txt", std::ios::out | std::ios::trunc);
 
-        for (const auto &i : lines) {
+        for (const auto &i : lines)
+        {
             file << i << std::endl;
         }
     }
 }
 
-void FileManager::addDynamicLibrary(const string &libName) {
-    if (isFileExist("./CMakeLists.txt")) {
+void FileManager::addDynamicLibrary(const string &libName)
+{
+    if (isFileExist("./CMakeLists.txt"))
+    {
         std::fstream file("./CMakeLists.txt", std::ios::in);
         std::string replace;
         std::string replaceWith;
@@ -212,55 +210,68 @@ void FileManager::addDynamicLibrary(const string &libName) {
         replaceWith = "set(SHARED_FLAGS\n -l" + libName;
         std::string line;
         std::vector<std::string> lines;
-        while (std::getline(file, line)) {
-
-            line = FileManager::replace(line, replace, replaceWith);
-
+        while (std::getline(file, line))
+        {
+            line = replaceString(line, replace, replaceWith);
             lines.push_back(line);
         }
         file.close();
         file.open("./CMakeLists.txt", std::ios::out | std::ios::trunc);
 
-        for (const auto &i : lines) {
+        for (const auto &i : lines)
+        {
             file << i << std::endl;
         }
+        file.close();
     }
 }
 
-std::string FileManager::replace(std::string data, const std::string &replace, const std::string &replaceWith) {
-    std::string::size_type pos = 0;
 
-    while ((pos = data.find(replace, pos)) != std::string::npos) {
-        data.replace(pos, data.size(), replaceWith);
-        pos += replaceWith.size();
-    }
-
-    return data;
-}
-
-FileManager::~FileManager() {
-    delete this;
-}
-
-string FileManager::getPath(FileManager::FileType type) {
-    switch (type) {
-        case FileType::SOURCE:
-        case FileType::MAIN:
-            return "./src/";
-        case FileType::HEADER:
-            return "./include/";
-        default:
-            return "./";
+string FileManager::getPath(FileManager::FileType type)
+{
+    switch (type)
+    {
+    case FileType::SOURCE:
+    case FileType::MAIN:
+        return "./src/";
+    case FileType::HEADER:
+        return "./include/";
+    default:
+        return "./";
     }
 }
 
-string FileManager::getExtension(FileManager::FileType type){
-    if(type == FileType::SOURCE || type == FileType::MAIN){
+std::string FileManager::replaceString(string orgString, const string search, const string replace)
+{
+    for (size_t pos = 0;; pos += replace.length())
+    {
+        pos = orgString.find(search, pos);
+        if (pos == string::npos)
+            break;
+        orgString.erase(pos, search.length());
+        orgString.insert(pos, replace);
+
+    }
+    return orgString;
+}
+
+string FileManager::getExtension(FileManager::FileType type)
+{
+    if (type == FileType::SOURCE || type == FileType::MAIN)
+    {
         return ".cpp";
-    } else if(type == FileType::HEADER){
+    }
+    else if (type == FileType::HEADER)
+    {
         return ".hpp";
-    } else {
+    }
+    else
+    {
         return "";
     }
 }
 
+FileManager::~FileManager()
+{
+    delete this;
+}

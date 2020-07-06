@@ -7,7 +7,8 @@
 
 using namespace std;
 
-class FileManager {
+class FileManager
+{
 
 private:
     string projectDir;
@@ -19,13 +20,14 @@ private:
     string OS_REMOVE;
 
 public:
-    enum class FileType {
+    enum class FileType
+    {
         CMAKE,
         MAKEFILE,
         HEADER,
-        SOURCE ,
+        SOURCE,
         MAIN,
-        MAC
+        CONF
     };
 
     void createCMakeFile();
@@ -33,10 +35,6 @@ public:
     void createConfFile();
 
     void createMainFile();
-
-    static void createSourceFile(const string &name);
-
-    static void createHeaderFile(const string &name);
 
     void createInitFiles();
 
@@ -48,7 +46,9 @@ public:
 
     static string getPath(FileType type);
 
-    static std::string replace(std::string data, const std::string &replace, const std::string &replaceWith);
+    static string getExtension(FileType type);
+
+    static string replaceString(string orgString, const string search, const string replace);
 
     static void addToCMakeFile(const string &name, const string &extension);
 
@@ -57,8 +57,6 @@ public:
     FileManager(string &projectName, string &projectVersion, string &projectAuthor, string &projectRepository);
 
     ~FileManager();
-
-    static string getExtension(FileType type);
 };
 
 #endif
