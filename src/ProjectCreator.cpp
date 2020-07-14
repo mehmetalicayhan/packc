@@ -38,9 +38,10 @@ void ProjectCreator::createDirectory(const std::string &directoryName) {
 #ifdef _WIN32
     path = p_path + "/" + directoryName;
     mkdir(path.c_str());
-#elif __unix__
+#elif __unix__ || __APPLE__
     path = p_path + "/" + directoryName;
     mkdir(path.c_str(), 0777);
+
 #endif
 }
 
