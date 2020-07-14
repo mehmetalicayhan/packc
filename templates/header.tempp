@@ -1,0 +1,14 @@
+#ifndef <FileName>_HPP
+#define <FileName>_HPP
+class <FileName>
+{
+private: 
+
+public: 
+
+   <FileName>(/* args */);
+   ~<FileName>();
+};
+
+
+#endif

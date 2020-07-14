@@ -21,6 +21,7 @@ set(PROJECT_SOURCES
         ${PROJECT_SOURCE_DIR}/Application.cpp
         ${PROJECT_SOURCE_DIR}/ProjectBuilder.cpp
         ${PROJECT_SOURCE_DIR}/FileManager.cpp
+        include/cfgpath.h
         )
 
 set(PROJECT_HEADERS

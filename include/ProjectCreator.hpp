@@ -3,10 +3,8 @@
 #ifdef _WIN32
 #include"direct.h"
 #define CMAKE_FLAGS "-G \"MinGW Makefiles\""
-#elif __unix__
-
+#elif __unix__ || __APPLE__
 #include <sys/stat.h>
-
 #endif
 
 #include <iostream>

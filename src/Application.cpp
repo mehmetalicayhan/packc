@@ -6,7 +6,7 @@
 
 Application::Application(int argc, char const *argv[]) {
     std::string programArg;
-
+    // A dictionary using function pointers
     if (argc < 2) {
         ProjectCreator::printHelp();
         return;
