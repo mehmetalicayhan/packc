@@ -4,10 +4,12 @@
 
 ## Index
 
-1. [Description](#description)
-2. [Usage](#usage)
-3. [Installation](#installation)
-4. [License](#license)
+- [Index](#index)
+- [Description](#description)
+- [Usage](#usage)
+- [Installation](#installation)
+  - [Debian based:](#debian-based)
+- [License](#license)
 
 ## Description
 
@@ -20,17 +22,21 @@ You can build and run your projects and define your own commands.
 
 Create Project:	packc create
 
-Create Source File:	packc add -s \<<span style="color:red;">filename</span>>
+Create Source File:	packc add -s \<<span style="color:red;">fileName</span>>
 
-Create C++ Class:	packc add -c \<<span style="color:red;">filename</span>>
+Create C++ Class:	packc add -c \<<span style="color:red;">fileName</span>>
 
-Create Header File:	packc add -h \<<span style="color:red;">filename</span>>
+Create Header File:	packc add -h \<<span style="color:red;">fileName</span>>
 
-Build Project:	 packc build
+Add Dynamic Library: 	packc add -l \<<span style="color:red;">libraryName</span>>
 
-Run Project:	 packc run
 
-Clean Project:	 packc clean
+Build Project:	 	packc build
+
+Run Project:	 	packc run
+
+Clean Project:	 	packc clean
+
 
 ## Installation
 
@@ -40,7 +46,7 @@ Clean Project:	 packc clean
 - Open a terminal and enter following command
 
 ```
-  sudo dpkg -i packc-0.0.2-beta.deb
+  sudo dpkg -i <packageName>
 ```
 
 ## License
