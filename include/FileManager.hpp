@@ -7,8 +7,7 @@
 
 using namespace std;
 
-class FileManager
-{
+class FileManager {
 
 private:
     string projectDir;
@@ -20,8 +19,7 @@ private:
     string OS_REMOVE;
 
 public:
-    enum class FileType
-    {
+    enum class FileType {
         CMAKE,
         MAKEFILE,
         HEADER,
@@ -29,6 +27,8 @@ public:
         MAIN,
         CONF
     };
+
+    FileManager(string &projectName, string &projectVersion, string &projectAuthor, string &projectRepository);
 
     void createCMakeFile();
 
@@ -38,7 +38,7 @@ public:
 
     void createInitFiles();
 
-    static std::string readFile(const std::string &name, FileType type);
+    static std::string readFile(FileType type);
 
     static bool isFileExist(const string &path);
 
@@ -54,7 +54,6 @@ public:
 
     static void addDynamicLibrary(const string &libName);
 
-    FileManager(string &projectName, string &projectVersion, string &projectAuthor, string &projectRepository);
 
     static string getConfigPath(bool isTest = false);
 
