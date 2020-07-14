@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include "json.hpp"
+#include <sstream>
 
 using json = nlohmann::json;
 
@@ -23,19 +24,21 @@ FileManager::FileManager(std::string &projectName, std::string &projectVersion,
 }
 
 void FileManager::createCMakeFile() {
+
+    std::string filePath = getConfigPath(true);
+    filePath += "cmake.tempp";
+    ifstream templateFile(filePath);
+    std::string fileContent;
+    if (templateFile) {
+        ostringstream ss;
+        ss << templateFile.rdbuf();
+        fileContent = ss.str();
+    }
+    templateFile.close();
+
     std::ofstream cmakeFile(projectDir + "/CMakeLists.txt");
-    cmakeFile << "cmake_minimum_required(VERSION 2.8)\n\n"
-              << "project(" + projectName + ")\n\n"
-              << "set(SHARED_FLAGS\n)\n"
-              << "set(CMAKE_C_FLAGS \"-std=c17 ${SHARED_FLAGS}\")\n"
-              << "set(CMAKE_CXX_FLAGS \"-std=c++17 ${SHARED_FLAGS}\")\n\n"
-              << "set(PROJECT_DIR ${CMAKE_SOURCE_DIR})\n\n"
-              << "set(PROJECT_INCLUDE_DIR ${PROJECT_DIR}/include)\n\n"
-              << "set(PROJECT_SOURCE_DIR ${PROJECT_DIR}/src)\n\n"
-              << "set(PROJECT_SOURCES\n${PROJECT_SOURCE_DIR}/main.cpp)\n\n"
-              << "set(PROJECT_HEADERS\n)\n\n"
-              << "include_directories(${PROJECT_INCLUDE_DIR})\n\n"
-              << "add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})\n\n";
+    fileContent = FileManager::replace(fileContent, "<ProjectName>", projectName);
+    cmakeFile << fileContent;
     cmakeFile.close();
 }
 
@@ -57,44 +60,26 @@ void FileManager::createConfFile() {
 }
 
 void FileManager::createMainFile() {
+    std::string filePath;
+    filePath = getConfigPath(true);
+    filePath += "main.tempp";
+    ifstream templateFile(filePath);
+    std::string fileContent;
+    if (templateFile) {
+        ostringstream ss;
+        ss << templateFile.rdbuf();
+        fileContent = ss.str();
+    }
+
+    templateFile.close();
+
     std::string mainPath = projectDir + "/src/main.cpp";
     std::ofstream mainFile(mainPath);
     mainFile
-            << "#include<iostream>\n\nint main(int argc,char** argv){\n\n\tstd::cout<<\"Hello World\"<<std::endl;\n\n\treturn 0;\n\n}";
+            << fileContent;
     mainFile.close();
 }
 
-void FileManager::createSourceFile(const std::string &name) {
-    std::string srcFilePath = "./src/" + name + ".cpp";
-    std::string fileContent = readFile(name,FileType::SOURCE);
-    std::string::size_type pos = 0;
-    while ((pos = fileContent.find("<ProjectName>", pos)) != std::string::npos) {
-        fileContent.replace(pos, fileContent.size(), name);
-        pos += name.size();
-    }
-    std::ofstream sourceFile(srcFilePath);
-    sourceFile << fileContent;
-    sourceFile.close();
-}
-
-void FileManager::createHeaderFile(const std::string &name) {
-    std::string headerFilePath = "./include/" + name + ".hpp";
-    std::ofstream headerFile(headerFilePath);
-
-    headerFile << "#ifndef " + name + "_HPP\n"
-               << "#define " + name + "_HPP\n"
-               << "class " + name + "\n"
-               << "{\n"
-               << "private: \n\n"
-               << "public: \n\n"
-               << "   " + name + "(/* args */); \n"
-               << "   ~" + name + "(); \n"
-               << "};\n"
-               << "\n\n"
-               << "#endif";
-
-    headerFile.close();
-}
 
 void FileManager::createInitFiles() {
     createCMakeFile();
@@ -115,12 +100,12 @@ void FileManager::createFile(FileType type, const std::string &name) {
     std::string fileExtension = getExtension(type);
     std::string filePath = getPath(type) + name + fileExtension;
 
-    std::string fileContent = readFile(name,FileType::SOURCE);
-    std::cout<<filePath;
+    std::string fileContent = readFile(name, FileType::SOURCE);
+    std::cout << filePath;
     std::ofstream file(filePath);
-    fileContent = FileManager::replace(fileContent,"<ProjectName>",name);
+    fileContent = FileManager::replace(fileContent, "<FileName>", name);
     if (isFileExist("./packc.json")) {
-        file<<fileContent;
+        file << fileContent;
         if (type == FileType::SOURCE) {
             addToCMakeFile(name, ".cpp");
         } else if (type == FileType::HEADER) {
@@ -135,14 +120,9 @@ void FileManager::createFile(FileType type, const std::string &name) {
 }
 
 
-std::string FileManager::readFile(const std::string& name,FileType type) {
-    char cfgdir[256];
-    get_user_config_folder(cfgdir, sizeof(cfgdir), "packc");
-    if (cfgdir[0] == 0) {
-        std::cout << "Unable to find home directory.\n";
-    }
-    std::cout << cfgdir << std::endl;
-    std::string filePath = "../../templates/";
+std::string FileManager::readFile(const std::string &name, FileType type) {
+
+    std::string filePath = getConfigPath(true);
     switch (type) {
         case FileType::SOURCE:
             filePath += "source.tempp";
@@ -238,9 +218,6 @@ std::string FileManager::replace(std::string data, const std::string &replace, c
     return data;
 }
 
-FileManager::~FileManager() {
-    delete this;
-}
 
 string FileManager::getPath(FileManager::FileType type) {
     switch (type) {
@@ -254,13 +231,29 @@ string FileManager::getPath(FileManager::FileType type) {
     }
 }
 
-string FileManager::getExtension(FileManager::FileType type){
-    if(type == FileType::SOURCE || type == FileType::MAIN){
+string FileManager::getExtension(FileManager::FileType type) {
+    if (type == FileType::SOURCE || type == FileType::MAIN) {
         return ".cpp";
-    } else if(type == FileType::HEADER){
+    } else if (type == FileType::HEADER) {
         return ".hpp";
     } else {
         return "";
     }
+}
+
+FileManager::~FileManager() {
+    delete this;
+}
+
+string FileManager::getConfigPath(bool isTest) {
+    if (isTest) {
+        return "../../templates/";
+    }
+    char configDir[256];
+    get_user_config_folder(configDir, sizeof(configDir), "packc");
+    if (configDir[0] == 0) {
+        std::cout << "Unable to find home directory.\n";
+    }
+    return configDir;
 }
 

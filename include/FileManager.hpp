@@ -34,10 +34,6 @@ public:
 
     void createMainFile();
 
-    static void createSourceFile(const string &name);
-
-    static void createHeaderFile(const string &name);
-
     void createInitFiles();
 
     static std::string readFile(const std::string &name, FileType type);
@@ -59,6 +55,8 @@ public:
     ~FileManager();
 
     static string getExtension(FileType type);
+
+    static string getConfigPath(bool isTest=false);
 };
 
 #endif

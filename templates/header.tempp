@@ -1,13 +1,13 @@
-#ifndef <ProjectName>_HPP
-#define <ProjectName>_HPP
-class <ProjectName>
+#ifndef <FileName>_HPP
+#define <FileName>_HPP
+class <FileName>
 {
 private: 
 
 public: 
 
-   <ProjectName>(/* args */); 
-   ~<ProjectName>(); 
+   <FileName>(/* args */);
+   ~<FileName>();
 };
 
 
